@@ -1,0 +1,241 @@
+/* ===== Vision & Mission Section ===== */
+
+.sectionAlt {
+  background: var(--primary);
+  color: var(--light);
+  text-align: center;
+  padding: 120px 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Animated Heading */
+.heading {
+  font-size: 40px;
+  margin-bottom: 60px;
+  position: relative;
+  display: inline-block;
+}
+
+/* Animated underline */
+.heading::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 4px;
+  background: var(--accent);
+  left: 50%;
+  bottom: -12px;
+  transform: translateX(-50%);
+  transition: width 0.5s ease;
+}
+
+.sectionAlt:hover .heading::after {
+  width: 80%;
+}
+
+/* Cards Container */
+.cards {
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+}
+
+/* Premium Card */
+.visionCard {
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid var(--accent);
+  padding: 40px;
+  width: 420px;
+  transition: all 0.5s ease;
+  backdrop-filter: blur(8px);
+  border-radius: 15px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Heavy Hover Effect */
+.visionCard:hover {
+  background: var(--accent);
+  color: var(--primary);
+  transform: translateY(-15px);
+  box-shadow: 0 20px 60px rgba(252, 163, 17, 0.6);
+}
+
+/* Text Styling */
+.visionCard h3 {
+  margin-bottom: 20px;
+  font-size: 22px;
+}
+
+.visionCard p {
+  line-height: 1.7;
+  font-size: 16px;
+}
+
+/* Glow border animation */
+.visionCard::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 15px;
+  padding: 2px;
+  background: linear-gradient(45deg, var(--accent), transparent);
+   -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: 0.5s;
+}
+
+.visionCard:hover::before {
+  opacity: 1;
+}
+/* ===== Management Section ===== */
+
+.managementGrid {
+  display: flex;
+  gap: 40px;
+  margin-top: 50px;
+  justify-content: space-between;
+}
+
+.managementCard {
+  width: 30%;
+  border: 2px solid var(--accent);
+  padding: 20px;
+  text-align: center;
+  transition: 0.4s;
+  background: var(--light);
+}
+
+.managementCard img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  margin-bottom: 15px;
+  border-radius: 10px;
+}
+
+.managementCard:hover {
+  transform: translateY(-10px);
+  background: var(--accent);
+  color: var(--primary);
+}
+
+/* ===== Diversity Section ===== */
+
+.diversityContainer {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.diversityStats {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 50px;
+}
+
+.statBox {
+  border: 2px solid var(--accent);
+  padding: 25px;
+  width: 30%;
+  transition: 0.4s;
+}
+
+.statBox h3 {
+  font-size: 32px;
+  color: var(--accent);
+}
+
+.statBox:hover {
+  background: var(--accent);
+  color: var(--primary);
+  transform: scale(1.05);
+}
+
+/* ===== ABOUT SECTION ===== */
+
+.aboutSection {
+  padding: 120px 80px;
+  background: var(--light);
+}
+
+.aboutContainer {
+  display: flex;
+  align-items: center;
+  gap: 70px;
+}
+
+/* Image Styling */
+.imageWrapper {
+  flex: 1;
+  overflow: hidden;
+  border-radius: 15px;
+}
+
+.imageWrapper img {
+  width: 100%;
+  max-width: 500px; /* smaller size */
+  border-radius: 15px;
+  transition: transform 0.6s ease, box-shadow 0.6s ease;
+}
+
+/* Image Hover Effect */
+.imageWrapper img:hover {
+  transform: scale(1.08);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+}
+
+/* Text Styling */
+.textWrapper {
+  flex: 1;
+}
+
+.textWrapper h2 {
+  font-size: 38px;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+/* Underline Animation */
+.textWrapper h2::after {
+  content: "";
+  width: 70px;
+  height: 4px;
+  background: var(--accent);
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  transition: width 0.4s ease;
+}
+
+.textWrapper:hover h2::after {
+  width: 120px;
+}
+
+.textWrapper p {
+  margin-top: 20px;
+  line-height: 1.8;
+  font-size: 17px;
+  color: var(--primary);
+  transition: 0.3s ease;
+}
+
+.textWrapper p:hover {
+  transform: translateX(5px);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .aboutContainer {
+    flex-direction: column;
+  }
+
+  .imageWrapper img {
+    max-width: 100%;
+  }
+}
