@@ -1,19 +1,68 @@
 import { NextResponse } from "next/server"
-import { connectDB } from "../../lib/mongodb"
-import Admission from "../../models/Admission"
+import connectDB from "@/app/lib/mongodb"
+import Admission from "@/app/models/Admission"
 
-export async function POST(req: Request){
+export async function GET(){
+
+ try{
 
   await connectDB()
 
-  const body = await req.json()
+  const admissions=await Admission.find()
 
-  const admission = new Admission(body)
+  return NextResponse.json(admissions)
 
-  await admission.save()
+ }
+
+ catch(error){
+
+  console.log("ADMISSION FETCH ERROR:",error)
+
+  return NextResponse.json(
+   {message:"Failed to fetch admissions"},
+   {status:500}
+  )
+
+ }
+
+}
+
+export async function POST(req:Request){
+
+ try{
+
+  await connectDB()
+
+  const body=await req.json()
+
+  const admission=await Admission.create({
+   studentName:body.studentName,
+   dob:body.dob,
+   gender:body.gender,
+   classApplying:body.classApplying,
+   fatherName:body.fatherName,
+   motherName:body.motherName,
+   phone:body.phone,
+   email:body.email,
+   status:"pending"
+  })
 
   return NextResponse.json({
-    message:"Application Submitted"
+   message:"Admission submitted",
+   admission
   })
+
+ }
+
+ catch(error){
+
+  console.log("ADMISSION ERROR:",error)
+
+  return NextResponse.json(
+   {message:"Server Error"},
+   {status:500}
+  )
+
+ }
 
 }

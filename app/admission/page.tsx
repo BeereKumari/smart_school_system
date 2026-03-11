@@ -61,37 +61,48 @@ setPhoto(URL.createObjectURL(file))
 
 
 // SUBMIT FORM
-const handleSubmit = async (e:any)=>{
+async function handleSubmit(e: any) {
 
-e.preventDefault()
+  e.preventDefault();
 
-try{
+  try {
 
-const res = await fetch("/api/admission",{
+    const res = await fetch("/api/admission", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(formData)
+    });
 
-method:"POST",
+    if (!res.ok) {
+      throw new Error("Submission failed");
+    }
 
-headers:{
-"Content-Type":"application/json"
-},
+    const data = await res.json();
 
-body:JSON.stringify(formData)
+    alert("Admission submitted successfully");
 
-})
+    setFormData({
+      studentName: "",
+      dob: "",
+      gender: "",
+      classApplying: "",
+      fatherName: "",
+      motherName: "",
+      phone: "",
+      email: ""
+    });
 
-const result = await res.json()
+  } catch (error) {
 
-console.log(result)
+    console.error("Submission Error:", error);
+    alert("Submission failed");
 
-setSuccess(true)
-
-}catch(error){
-
-console.log("Submission Error:",error)
+  }
 
 }
 
-}
 
 
 return(
@@ -170,11 +181,16 @@ required
 >
 
 <option value="">Class Applying For</option>
-<option value="Grade 1">Grade 1</option>
-<option value="Grade 2">Grade 2</option>
-<option value="Grade 3">Grade 3</option>
-<option value="Grade 4">Grade 4</option>
-
+<option value="Grade 1">1</option>
+<option value="Grade 2">2</option>
+<option value="Grade 3">3</option>
+<option value="Grade 4">4</option>
+<option value="Grade 1">5</option>
+<option value="Grade 2">6</option>
+<option value="Grade 3">7</option>
+<option value="Grade 4">8</option>
+<option value="Grade 4">9</option>
+<option value="Grade 4">10</option>
 </select>
 
 <button

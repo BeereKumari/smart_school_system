@@ -6,7 +6,7 @@ export default function Footer() {
       textAlign: "center",
       padding: "25px"
     }}>
-      © 2026 Smart Student System | Excellence in Education
+      © 2026 Smart School System | Excellence in Education
     </footer>
   )
 }

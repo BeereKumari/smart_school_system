@@ -24,7 +24,7 @@ const testimonials = [
 export default function Testimonials() {
   return (
     <section id="testimonials" className={styles.section}>
-      <h2 className={styles.heading}>Student Testimonials</h2>
+      <h2 className={styles.heading}>What People Say</h2>
 
       <div className={styles.grid}>
         {testimonials.map((t, index) => (

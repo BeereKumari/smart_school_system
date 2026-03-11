@@ -23,7 +23,7 @@ export default function Navbar() {
 
   return (
     <nav className={styles.nav}>
-      <div className={styles.logo}>Smart Student System</div>
+      <div className={styles.logo}>Smart School System</div>
 
       <ul className={styles.menu}>
         <li><a className={active==="about"?styles.active:""} href="#about">Who We Are</a></li>
@@ -36,7 +36,7 @@ export default function Navbar() {
         <li> <Link href="/admission" className={styles.active}>Admissions</Link> </li>
       </ul>
 
-      <button className={styles.loginBtn}>Login</button>
+      <button className={styles.loginBtn}><Link href="/login" className="login-btn">Login</Link></button>
     </nav>
   )
 }

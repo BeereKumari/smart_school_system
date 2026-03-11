@@ -1,24 +1,28 @@
-import mongoose from "mongoose"
+import mongoose, { Schema, models, model } from "mongoose";
 
-const AdmissionSchema = new mongoose.Schema({
+const AdmissionSchema = new Schema(
+{
+  studentName: String,
+  dob: String,
+  gender: String,
+  classApplying: String,
 
-studentName:String,
-dob:String,
-gender:String,
-classApplying:String,
+  fatherName: String,
+  motherName: String,
 
-fatherName:String,
-motherName:String,
+  phone: String,
+  email: String,
 
-phone:String,
-email:String,
+  status: {
+    type: String,
+    default: "pending"
+  }
 
-createdAt:{
-type:Date,
-default:Date.now
-}
+},
+{ timestamps: true }
+);
 
-})
+const Admission =
+  models.Admission || model("Admission", AdmissionSchema);
 
-export default mongoose.models.Admission ||
-mongoose.model("Admission", AdmissionSchema, "admissions")
+export default Admission;
