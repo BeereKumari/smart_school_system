@@ -1,0 +1,61 @@
+.layout{
+
+display:flex;
+min-height:100vh;
+
+}
+
+/* MAIN CONTENT */
+
+.main{
+
+flex:1;
+padding:25px;
+margin-left:220px;
+transition:all .3s ease;
+
+}
+
+/* WHEN SIDEBAR COLLAPSED */
+
+.mainExpanded{
+
+margin-left:70px;
+
+}
+
+/* TOGGLE BUTTON */
+
+.toggleBtn{
+
+position:fixed;
+
+left:220px;
+top:20px;
+
+width:32px;
+height:32px;
+
+border-radius:50%;
+
+border:none;
+
+background:white;
+
+box-shadow:0 4px 10px rgba(0,0,0,.2);
+
+cursor:pointer;
+
+z-index:200;
+
+transition:all .3s ease;
+
+}
+
+/* BUTTON POSITION WHEN COLLAPSED */
+
+.toggleCollapsed{
+
+left:70px;
+
+}

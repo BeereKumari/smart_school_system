@@ -1,0 +1,209 @@
+.container{
+ height:100vh;
+ display:flex;
+ justify-content:center;
+ align-items:center;
+ background:linear-gradient(135deg,#0f2a44,#1e3c72);
+ font-family:Arial, Helvetica, sans-serif;
+}
+
+/* Bigger login box */
+.loginCard{
+ width:520px;
+ padding:55px 50px;
+ background:white;
+ border-radius:14px;
+ box-shadow:0 20px 45px rgba(0,0,0,0.35);
+ animation:fadeUp 0.6s ease;
+}
+
+.title{
+ text-align:center;
+ font-size:30px;
+ font-weight:700;
+ color:#0f2a44;
+ margin-bottom:30px;
+}
+
+.title::after{
+ content:"";
+ display:block;
+ width:70px;
+ height:4px;
+ background:#ff9800;
+ margin:10px auto;
+ border-radius:3px;
+}
+
+/* form layout */
+.form{
+ display:flex;
+ flex-direction:column;
+ gap:20px;
+}
+
+/* input fields */
+.form input{
+ width:100%;
+ padding:14px 45px 14px 14px;
+ border:1px solid #ddd;
+ border-radius:8px;
+ font-size:15px;
+ transition:0.3s;
+}
+
+.form input:focus{
+ outline:none;
+ border-color:#ff9800;
+ box-shadow:0 0 6px rgba(255,152,0,0.4);
+}
+
+/* password field container */
+.passwordBox{
+ position:relative;
+ width:100%;
+}
+
+/* eye icon */
+.eye{
+ position:absolute;
+ right:15px;
+ top:50%;
+ transform:translateY(-50%);
+ cursor:pointer;
+ color:#555;
+ font-size:18px;
+}
+
+/* login button */
+.form button{
+ padding:15px;
+ border:none;
+ border-radius:8px;
+ background:#ff9800;
+ color:white;
+ font-weight:bold;
+ font-size:16px;
+ cursor:pointer;
+ transition:0.3s;
+}
+
+.form button:hover{
+ transform:translateY(-3px);
+ box-shadow:0 10px 20px rgba(0,0,0,0.25);
+}
+
+.links{
+ text-align:center;
+ margin-top:10px;
+}
+
+.links a{
+ color:#0f2a44;
+ text-decoration:none;
+}
+
+.links a:hover{
+ text-decoration:underline;
+}
+
+@keyframes fadeUp{
+ from{
+  opacity:0;
+  transform:translateY(40px);
+ }
+ to{
+  opacity:1;
+  transform:translateY(0);
+ }
+}
+
+/* login status message */
+.message{
+ margin-top:10px;
+ font-size:14px;
+ text-align:center;
+ animation:fadeInMsg 0.4s ease;
+}
+
+/* success message */
+.success{
+ color:#2e7d32;
+ border-top:2px solid #2e7d32;
+ padding-top:6px;
+}
+
+/* error message */
+.error{
+ color:#d32f2f;
+ border-top:2px solid #d32f2f;
+ padding-top:6px;
+}
+
+/* animation */
+@keyframes fadeInMsg{
+ from{
+  opacity:0;
+  transform:translateY(5px);
+ }
+ to{
+  opacity:1;
+  transform:translateY(0);
+ }
+}
+/* login status box */
+
+.statusBox{
+ margin-top:15px;
+ padding:12px;
+ border-radius:8px;
+ font-size:14px;
+ text-align:center;
+ animation:slideFade 0.4s ease;
+}
+
+/* success */
+
+.success{
+ background:#e8f5e9;
+ border-left:4px solid #2e7d32;
+ color:#2e7d32;
+}
+
+/* error */
+
+.error{
+ background:#ffebee;
+ border-left:4px solid #d32f2f;
+ color:#d32f2f;
+}
+
+/* animation */
+
+@keyframes slideFade{
+ from{
+  opacity:0;
+  transform:translateY(6px);
+ }
+ to{
+  opacity:1;
+  transform:translateY(0);
+ }
+}
+.loginCard{
+ animation:fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn{
+
+ from{
+  opacity:0;
+  transform:translateY(20px);
+ }
+
+ to{
+  opacity:1;
+  transform:translateY(0);
+ }
+
+}
