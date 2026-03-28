@@ -1,0 +1,315 @@
+.container {
+  margin-bottom: 32px;
+}
+
+.header {
+  margin-bottom: 24px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 8px 0;
+  position: relative;
+  display: inline-block;
+}
+
+.title::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(90deg, #f59e0b, #fbbf24);
+  border-radius: 2px;
+}
+
+.subtitle {
+  font-size: 15px;
+  color: #64748b;
+  margin: 16px 0 0 0;
+}
+
+.actionsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.actionCard {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 24px;
+  background: #ffffff;
+  border: 2px solid #e2e8f0;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.35s ease;
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+  animation: fadeInUp 0.5s ease forwards;
+  opacity: 0;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.actionCard::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.actionCard:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
+}
+
+.actionCard:active {
+  transform: translateY(-2px) scale(0.98);
+}
+
+.iconWrapper {
+  width: 60px;
+  height: 60px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  flex-shrink: 0;
+  transition: all 0.35s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.actionCard:hover .iconWrapper {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.content h3 {
+  font-size: 17px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 6px 0;
+  transition: color 0.3s ease;
+}
+
+.content p {
+  font-size: 13px;
+  color: #94a3b8;
+  margin: 0;
+  transition: color 0.3s ease;
+}
+
+.arrow {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 700;
+  flex-shrink: 0;
+  transition: all 0.35s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.actionCard:hover .arrow {
+  transform: translateX(6px);
+}
+
+/* Blue Theme */
+.actionCard.blue {
+  border-color: rgba(59, 130, 246, 0.2);
+}
+
+.actionCard.blue::before {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, transparent 100%);
+}
+
+.actionCard.blue:hover {
+  border-color: #3b82f6;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.02) 0%, #ffffff 100%);
+}
+
+.actionCard.blue .iconWrapper {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(99, 102, 241, 0.1) 100%);
+  color: #3b82f6;
+}
+
+.actionCard.blue .arrow {
+  background: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+}
+
+.actionCard.blue:hover .arrow {
+  background: #3b82f6;
+  color: white;
+}
+
+/* Green Theme */
+.actionCard.green {
+  border-color: rgba(34, 197, 94, 0.2);
+}
+
+.actionCard.green::before {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.08) 0%, transparent 100%);
+}
+
+.actionCard.green:hover {
+  border-color: #22c55e;
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.02) 0%, #ffffff 100%);
+}
+
+.actionCard.green .iconWrapper {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.15) 0%, rgba(16, 185, 129, 0.1) 100%);
+  color: #22c55e;
+}
+
+.actionCard.green .arrow {
+  background: rgba(34, 197, 94, 0.1);
+  color: #22c55e;
+}
+
+.actionCard.green:hover .arrow {
+  background: #22c55e;
+  color: white;
+}
+
+/* Purple Theme */
+.actionCard.purple {
+  border-color: rgba(139, 92, 246, 0.2);
+}
+
+.actionCard.purple::before {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.08) 0%, transparent 100%);
+}
+
+.actionCard.purple:hover {
+  border-color: #8b5cf6;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.02) 0%, #ffffff 100%);
+}
+
+.actionCard.purple .iconWrapper {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(168, 85, 247, 0.1) 100%);
+  color: #8b5cf6;
+}
+
+.actionCard.purple .arrow {
+  background: rgba(139, 92, 246, 0.1);
+  color: #8b5cf6;
+}
+
+.actionCard.purple:hover .arrow {
+  background: #8b5cf6;
+  color: white;
+}
+
+/* Orange Theme */
+.actionCard.orange {
+  border-color: rgba(245, 158, 11, 0.2);
+}
+
+.actionCard.orange::before {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, transparent 100%);
+}
+
+.actionCard.orange:hover {
+  border-color: #f59e0b;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.02) 0%, #ffffff 100%);
+}
+
+.actionCard.orange .iconWrapper {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(251, 191, 36, 0.1) 100%);
+  color: #f59e0b;
+}
+
+.actionCard.orange .arrow {
+  background: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+}
+
+.actionCard.orange:hover .arrow {
+  background: #f59e0b;
+  color: white;
+}
+
+/* Red Theme */
+.actionCard.red {
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+.actionCard.red::before {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, transparent 100%);
+}
+
+.actionCard.red:hover {
+  border-color: #ef4444;
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.02) 0%, #ffffff 100%);
+}
+
+.actionCard.red .iconWrapper {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(220, 38, 38, 0.1) 100%);
+  color: #ef4444;
+}
+
+.actionCard.red .arrow {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+.actionCard.red:hover .arrow {
+  background: #ef4444;
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .actionsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .actionCard {
+    padding: 20px;
+  }
+
+  .iconWrapper {
+    width: 52px;
+    height: 52px;
+    font-size: 22px;
+  }
+
+  .content h3 {
+    font-size: 16px;
+  }
+
+  .content p {
+    font-size: 12px;
+  }
+}

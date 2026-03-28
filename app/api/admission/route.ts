@@ -86,7 +86,9 @@ export async function POST(req:Request){
   // ✅ 🔔 ADMIN NOTIFICATION (ADDED)
   await Notification.create({
     userType: "admin",
-    message: `New admission request from ${admission.studentName}`
+    message: `New admission request from ${admission.studentName}`,
+    type: "admission",
+    admissionId: admission._id
   })
 
   console.log("✅ Admin notification created:", admission.studentName)

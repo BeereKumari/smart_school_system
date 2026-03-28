@@ -1,42 +1,237 @@
-.title{
-  font-size:26px;
-  margin-bottom:20px;
+.container {
+  padding: 32px 40px;
+  max-width: 1600px;
 }
 
-.form{
-  display:flex;
-  gap:10px;
-  margin-bottom:30px;
+.headerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+  padding: 24px 32px;
+  background: linear-gradient(135deg, #1e3a5f 0%, #0f2744 100%);
+  border-radius: 16px;
+  color: #ffffff;
+  box-shadow: 0 10px 40px rgba(30, 58, 95, 0.3);
 }
 
-.form input{
-  padding:10px;
-  border:1px solid #ddd;
-  border-radius:6px;
+.title {
+  font-size: 26px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
 }
 
-.form button{
-  background:#ff9800;
-  border:none;
-  padding:10px 20px;
-  color:white;
-  border-radius:6px;
-  cursor:pointer;
+.formWrapper {
+  background: #ffffff;
+  padding: 28px;
+  border-radius: 16px;
+  margin-bottom: 28px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
 }
 
-.table{
-  width:100%;
-  border-collapse:collapse;
-  background:white;
+.formTitle {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1e3a5f;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #f1f5f9;
 }
 
-.table th{
-  background:#0f2a44;
-  color:white;
-  padding:12px;
+.form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  align-items: end;
 }
 
-.table td{
-  padding:10px;
-  border-bottom:1px solid #eee;
+.form input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.form input:focus {
+  outline: none;
+  border-color: #f59e0b;
+  box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.1);
+}
+
+.form button {
+  background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+  color: #1e3a5f;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.form button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(245, 158, 11, 0.3);
+}
+
+.tableWrapper {
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th {
+  background: linear-gradient(135deg, #1e3a5f 0%, #0f2744 100%);
+  color: white;
+  padding: 18px 20px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-align: left;
+}
+
+.table th:first-child {
+  border-top-left-radius: 16px;
+}
+
+.table th:last-child {
+  border-top-right-radius: 16px;
+}
+
+.table td {
+  padding: 16px 20px;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 14px;
+  color: #1e293b;
+  transition: all 0.2s ease;
+}
+
+.table tr {
+  transition: all 0.2s ease;
+}
+
+.table tbody tr:hover {
+  background: #f8fafc;
+}
+
+.table tbody tr:hover td {
+  transform: scale(1.005);
+}
+
+.teacherId {
+  font-family: monospace;
+  font-size: 13px;
+  color: #64748b;
+  background: #f1f5f9;
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+
+.subject {
+  display: inline-block;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(139, 92, 246, 0.05) 100%);
+  color: #7c3aed;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.actionBtn {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: none;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.viewBtn {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.viewBtn:hover {
+  background: #e2e8f0;
+  color: #1e293b;
+}
+
+.editBtn {
+  background: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+}
+
+.editBtn:hover {
+  background: #3b82f6;
+  color: white;
+}
+
+.deleteBtn {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+.deleteBtn:hover {
+  background: #ef4444;
+  color: white;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 64px 32px;
+  color: #64748b;
+}
+
+.emptyIcon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  color: #cbd5e1;
+}
+
+.emptyState p {
+  font-size: 16px;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 20px;
+  }
+
+  .form {
+    grid-template-columns: 1fr;
+  }
+
+  .table {
+    font-size: 12px;
+  }
+
+  .table th,
+  .table td {
+    padding: 12px;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
 }

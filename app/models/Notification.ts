@@ -2,12 +2,21 @@ import mongoose from "mongoose";
 
 const NotificationSchema = new mongoose.Schema({
   userType: {
-    type: String, // "admin" | "parent"
+    type: String,
     required: true
   },
   message: {
     type: String,
     required: true
+  },
+  type: {
+    type: String,
+    default: "info"
+  },
+  admissionId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Admission",
+    default: null
   },
   email: String,
   read: {

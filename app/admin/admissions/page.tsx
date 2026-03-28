@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import styles from "../../styles/AdminAdmissions.module.css";
+import { FaClipboardList, FaUserPlus, FaSearch, FaUsers, FaClock, FaCheckCircle, FaTimesCircle, FaUserGraduate, FaFileAlt } from "react-icons/fa";
 
-/* FORM TYPE */
 type ManualAdmissionForm = {
   studentName: string;
   dob: string;
@@ -35,7 +35,6 @@ text:"",
 type:"success"
 })
 
-/* FORM STATE */
 const [form,setForm] = useState<ManualAdmissionForm>({
 studentName:"",
 dob:"",
@@ -91,7 +90,6 @@ async function approve(id:string){
 
   try{
 
-    // ✅ instant UI update
     setAdmissions(prev =>
       prev.map(a =>
         a._id === id ? { ...a, status: "approved" } : a
@@ -114,7 +112,6 @@ async function decline(id:string){
 
   try{
 
-    // ✅ instant UI update (optimistic)
     setAdmissions(prev =>
       prev.map(a =>
         a._id === id ? { ...a, status: "declined" } : a
@@ -132,7 +129,7 @@ async function decline(id:string){
   }
 
 }
-function showMessage(text:string,type:"success"|"error"="success"){
+function showMsg(text:string,type:"success"|"error"="success"){
 
 setMessage({show:true,text,type})
 
@@ -165,12 +162,12 @@ body:formData
 const data = await res.json()
 
 if(!res.ok){
-showMessage(data.message || "Failed","error")
+showMsg(data.message || "Failed","error")
 setSaving(false)
 return
 }
 
-showMessage("Admission Added Successfully","success")
+showMsg("Admission Added Successfully","success")
 
 setShowForm(false)
 
@@ -190,7 +187,7 @@ loadAdmissions()
 
 }catch(error){
 console.error(error)
-showMessage("Something went wrong","error")
+showMsg("Something went wrong","error")
 }
 
 setSaving(false)
@@ -214,19 +211,18 @@ if(activeFilter==="all") return true
 return a.status===activeFilter
 })
 .filter((a:any)=>
-a.studentName.toLowerCase().includes(search.toLowerCase()) ||
-a.email.toLowerCase().includes(search.toLowerCase())
+a.studentName?.toLowerCase().includes(search.toLowerCase()) ||
+a.email?.toLowerCase().includes(search.toLowerCase())
 )
 
-return(
+ return(
 
 <div className={styles.container}>
-
-{/* HEADER */}
 
 <div className={styles.headerRow}>
 
 <h1 className={styles.title}>
+<FaClipboardList />
 Student Admission Requests
 </h1>
 
@@ -234,49 +230,96 @@ Student Admission Requests
 className={styles.addBtn}
 onClick={()=>setShowForm(true)}
 >
-+ Add Admission
+<FaUserPlus />
+Add Admission
 </button>
 
 </div>
 
-{/* MESSAGE */}
-
 {message.show && (
 <div className={`${styles.message} ${styles[message.type]}`}>
-<span>{message.type==="success" ? "✔" : "⚠"}</span>
+<span>{message.type==="success" ? "✓" : "!"}</span>
 <p>{message.text}</p>
 </div>
 )}
 
-{/* SEARCH */}
+<div className={styles.searchFilterRow}>
 
 <input
 className={styles.searchInput}
-placeholder="Search student..."
+placeholder="Search by name or email..."
 value={search}
 onChange={(e)=>setSearch(e.target.value)}
 />
 
-{/* STATS */}
+</div>
 
 <div className={styles.statsGrid}>
 
-{["all","pending","approved","declined"].map((type)=>(
 <div
-key={type}
-onClick={()=>setActiveFilter(type)}
-className={`${styles.statCard} ${activeFilter===type?styles.activeStat:""}`}
+onClick={()=>setActiveFilter("all")}
+className={`${styles.statCard} ${activeFilter==="all"?styles.activeStat:""}`}
 >
-<h3>{type.toUpperCase()}</h3>
-<p>{stats[type as keyof typeof stats]}</p>
+<div className={styles.statIcon}>
+<FaUsers />
 </div>
-))}
+<div className={styles.statContent}>
+<p className={styles.statLabel}>All</p>
+<p className={styles.statValue}>{stats.total}</p>
+</div>
+</div>
+
+<div
+onClick={()=>setActiveFilter("pending")}
+className={`${styles.statCard} ${activeFilter==="pending"?styles.activeStat:""}`}
+>
+<div className={styles.statIcon}>
+<FaClock />
+</div>
+<div className={styles.statContent}>
+<p className={styles.statLabel}>Pending</p>
+<p className={styles.statValue}>{stats.pending}</p>
+</div>
+</div>
+
+<div
+onClick={()=>setActiveFilter("approved")}
+className={`${styles.statCard} ${activeFilter==="approved"?styles.activeStat:""}`}
+>
+<div className={styles.statIcon}>
+<FaCheckCircle />
+</div>
+<div className={styles.statContent}>
+<p className={styles.statLabel}>Approved</p>
+<p className={styles.statValue}>{stats.approved}</p>
+</div>
+</div>
+
+<div
+onClick={()=>setActiveFilter("declined")}
+className={`${styles.statCard} ${activeFilter==="declined"?styles.activeStat:""}`}
+>
+<div className={styles.statIcon}>
+<FaTimesCircle />
+</div>
+<div className={styles.statContent}>
+<p className={styles.statLabel}>Declined</p>
+<p className={styles.statValue}>{stats.declined}</p>
+</div>
+</div>
 
 </div>
 
-{/* DATA */}
-
-{loading ? <p>Loading...</p> : (
+{loading ? (
+<div className={styles.loading}>
+<div className={styles.loadingSpinner}></div>
+</div>
+) : filteredAdmissions.length === 0 ? (
+<div className={styles.emptyState}>
+<FaFileAlt />
+<p>No admissions found</p>
+</div>
+) : (
 
 <div className={styles.grid}>
 
@@ -285,9 +328,11 @@ className={`${styles.statCard} ${activeFilter===type?styles.activeStat:""}`}
 
 <div className={styles.cardHeader}>
 
-<img src={a.studentPhoto} className={styles.studentPhoto}/>
+<div className={styles.photoWrapper}>
+<img src={a.studentPhoto || "/default-avatar.png"} className={styles.studentPhoto} alt={a.studentName}/>
+</div>
 
-<div>
+<div className={styles.studentInfo}>
 <h3>{a.studentName}</h3>
 <span className={`${styles.status} ${styles[a.status]}`}>
 {a.status}
@@ -299,43 +344,33 @@ className={`${styles.statCard} ${activeFilter===type?styles.activeStat:""}`}
 <div className={styles.cardBody}>
 
 <div className={styles.detailRow}>
-  <span>Class</span>
-  <p>{a.classApplying}</p>
+<span>Class</span>
+<p>{a.classApplying}</p>
 </div>
 
 <div className={styles.detailRow}>
-  <span>DOB</span>
-  <p>{a.dob}</p>
+<span>DOB</span>
+<p>{a.dob}</p>
 </div>
 
 <div className={styles.detailRow}>
-  <span>Gender</span>
-  <p>{a.gender}</p>
+<span>Gender</span>
+<p>{a.gender}</p>
 </div>
 
 <div className={styles.detailRow}>
-  <span>Father</span>
-  <p>{a.fatherName}</p>
+<span>Father</span>
+<p>{a.fatherName}</p>
 </div>
 
 <div className={styles.detailRow}>
-  <span>Mother</span>
-  <p>{a.motherName}</p>
+<span>Email</span>
+<p>{a.email}</p>
 </div>
 
 <div className={styles.detailRow}>
-  <span>Email</span>
-  <p>{a.email}</p>
-</div>
-
-<div className={styles.detailRow}>
-  <span>Phone</span>
-  <p>{a.phone}</p>
-</div>
-
-<div className={styles.detailRow}>
-  <span>Applied</span>
-  <p>{formatDate(a.createdAt)}</p>
+<span>Phone</span>
+<p>{a.phone}</p>
 </div>
 
 </div>
@@ -349,25 +384,25 @@ className={`${styles.statCard} ${activeFilter===type?styles.activeStat:""}`}
   onClick={()=>approve(a._id)} 
   className={styles.approveBtn}
 >
-  ✔ Approve
+  ✓ Approve
 </button>
 
 <button 
   onClick={()=>decline(a._id)} 
   className={styles.declineBtn}
 >
-  ✖ Decline
+  ✕ Decline
 </button>
 
 </div>
 )}
 
 {a.status==="approved" && (
-<button className={styles.approvedBtn}>✔ Approved</button>
+<button className={styles.approvedBtn}>✓ Approved</button>
 )}
 
 {a.status==="declined" && (
-<button className={styles.declinedBtn}>✖ Declined</button>
+<button className={styles.declinedBtn}>✕ Declined</button>
 )}
 
 </div>
@@ -379,31 +414,82 @@ className={`${styles.statCard} ${activeFilter===type?styles.activeStat:""}`}
 
 )}
 
-{/* MODAL STUDENT */}
-
 {selectedStudent && (
 
 <div className={styles.modalOverlay} onClick={()=>setSelectedStudent(null)}>
 
-<div className={styles.modal} onClick={(e)=>e.stopPropagation()}>
+<div className={styles.formModal} onClick={(e)=>e.stopPropagation()}>
 
-<img src={selectedStudent.studentPhoto} className={styles.modalPhoto}/>
+<div className={styles.formHeader}>
 
-<h2>{selectedStudent.studentName}</h2>
+<h2>Student Details</h2>
 
-<p>{selectedStudent.email}</p>
+<button 
+className={styles.closeIcon}
+onClick={()=>setSelectedStudent(null)}
+>
+✕
+</button>
 
-<button onClick={()=>setSelectedStudent(null)}>
+</div>
+
+<div style={{ textAlign: 'center', marginBottom: '20px' }}>
+<div className={styles.photoWrapper} style={{ width: '90px', height: '90px', margin: '0 auto 14px' }}>
+<img src={selectedStudent.studentPhoto || "/default-avatar.png"} className={styles.studentPhoto} alt={selectedStudent.studentName}/>
+</div>
+<h3 style={{ color: '#1e3a5f', margin: '0 0 6px 0', fontSize: '18px' }}>{selectedStudent.studentName}</h3>
+<p style={{ color: '#64748b', margin: 0, fontSize: '13px' }}>{selectedStudent.email}</p>
+</div>
+
+<div className={styles.cardBody}>
+<div className={styles.detailRow}>
+<span>Class</span>
+<p>{selectedStudent.classApplying}</p>
+</div>
+<div className={styles.detailRow}>
+<span>DOB</span>
+<p>{selectedStudent.dob}</p>
+</div>
+<div className={styles.detailRow}>
+<span>Gender</span>
+<p>{selectedStudent.gender}</p>
+</div>
+<div className={styles.detailRow}>
+<span>Father</span>
+<p>{selectedStudent.fatherName}</p>
+</div>
+<div className={styles.detailRow}>
+<span>Mother</span>
+<p>{selectedStudent.motherName}</p>
+</div>
+<div className={styles.detailRow}>
+<span>Phone</span>
+<p>{selectedStudent.phone}</p>
+</div>
+<div className={styles.detailRow}>
+<span>Status</span>
+<p style={{ textTransform: 'capitalize' }}>{selectedStudent.status}</p>
+</div>
+<div className={styles.detailRow}>
+<span>Applied</span>
+<p>{formatDate(selectedStudent.createdAt)}</p>
+</div>
+</div>
+
+<div className={styles.formActions}>
+<button 
+className={styles.cancelBtn}
+onClick={()=>setSelectedStudent(null)}
+>
 Close
 </button>
+</div>
 
 </div>
 
 </div>
 
 )}
-
-{/* ✅ MODERN FORM POPUP */}
 
 {showForm && (
 
@@ -432,7 +518,9 @@ onClick={()=>setShowForm(false)}
 
 <form onSubmit={handleManualAdmission}>
 
-<input placeholder="Student Name" required
+<input 
+placeholder="Student Name" 
+required
 value={form.studentName}
 onChange={(e)=>setForm({...form,studentName:e.target.value})}
 />

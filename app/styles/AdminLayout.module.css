@@ -1,61 +1,57 @@
-.layout{
-
-display:flex;
-min-height:100vh;
-
+.layout {
+  display: flex;
+  min-height: 100vh;
+  background: #f8fafc;
 }
 
-/* MAIN CONTENT */
-
-.main{
-
-flex:1;
-padding:25px;
-margin-left:220px;
-transition:all .3s ease;
-
+.main {
+  flex: 1;
+  margin-left: 280px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  min-height: 100vh;
+  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
 }
 
-/* WHEN SIDEBAR COLLAPSED */
-
-.mainExpanded{
-
-margin-left:70px;
-
+.mainExpanded {
+  margin-left: 80px;
 }
 
-/* TOGGLE BUTTON */
-
-.toggleBtn{
-
-position:fixed;
-
-left:220px;
-top:20px;
-
-width:32px;
-height:32px;
-
-border-radius:50%;
-
-border:none;
-
-background:white;
-
-box-shadow:0 4px 10px rgba(0,0,0,.2);
-
-cursor:pointer;
-
-z-index:200;
-
-transition:all .3s ease;
-
+.toggleBtn {
+  position: fixed;
+  top: 24px;
+  left: 290px;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: none;
+  background: #ffffff;
+  color: #1e3a5f;
+  cursor: pointer;
+  z-index: 150;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-size: 14px;
 }
 
-/* BUTTON POSITION WHEN COLLAPSED */
+.toggleBtn:hover {
+  background: #f59e0b;
+  color: #ffffff;
+  transform: scale(1.05);
+}
 
-.toggleCollapsed{
+.toggleCollapsed {
+  left: 90px;
+}
 
-left:70px;
+@media (max-width: 1024px) {
+  .main {
+    margin-left: 80px;
+  }
 
+  .toggleBtn {
+    left: 90px;
+  }
 }
