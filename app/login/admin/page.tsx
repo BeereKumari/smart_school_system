@@ -1,33 +1,21 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import styles from "../../styles/login.module.css"
-import { FaEye, FaEyeSlash } from "react-icons/fa"
-
-import { onAuthStateChanged } from "firebase/auth"
-import { auth } from "@/app/lib/firebase"
+import { FaEye, FaEyeSlash, FaUserShield } from "react-icons/fa"
 
 export default function AdminLogin(){
 
  const [show,setShow]=useState(false)
-
  const [email,setEmail]=useState("")
  const [password,setPassword]=useState("")
-
  const [message,setMessage]=useState("")
  const [type,setType]=useState("")
-
-
- /* GOOGLE LOGIN HANDLER */
-
-
-
-
- /* NORMAL LOGIN */
+ const [loading, setLoading] = useState(false)
 
  async function handleSubmit(e: React.FormEvent<HTMLFormElement>){
-
   e.preventDefault()
+  setLoading(true)
 
   const res = await fetch("/api/auth/login",{
    method:"POST",
@@ -44,38 +32,24 @@ export default function AdminLogin(){
 
   const data = await res.json()
 
-  console.log("LOGIN RESPONSE:",data)
-
-
   if(data.success){
-
    setType("success")
-   setMessage("Login successful! Redirecting to Admin Dashboard")
-
-
+   setMessage("Login successful! Redirecting to Admin Dashboard...")
    setTimeout(()=>{
     window.location.href = data.redirect
    },1500)
-
   }
-
   else{
-
    setType("error")
-   setMessage("Invalid credentials. Please try again.")
-
+   setMessage(data.message || "Invalid credentials. Please try again.")
    setEmail("")
    setPassword("")
-
    setTimeout(()=>{
     setMessage("")
-   },3000)
-
+   },4000)
   }
-
+  setLoading(false)
  }
-
-
 
  function handleEmailChange(e: React.ChangeEvent<HTMLInputElement>){
   setEmail(e.target.value)
@@ -87,72 +61,77 @@ export default function AdminLogin(){
   setMessage("")
  }
 
-
-
  return(
-
   <div className={styles.container}>
+   <div className={styles.bgOverlay}></div>
+   <div className={styles.bgPattern}></div>
+   <div className={`${styles.floatingOrb} ${styles.orb1}`}></div>
+   <div className={`${styles.floatingOrb} ${styles.orb2}`}></div>
+   <div className={`${styles.floatingOrb} ${styles.orb3}`}></div>
 
    <div className={styles.loginCard}>
-
-    <h2 className={styles.title}>Admin Login</h2>
-
-    <form className={styles.form} onSubmit={handleSubmit} autoComplete="off">
-
-     <input
-      type="email"
-      placeholder="Admin Email"
-      value={email}
-      required
-      autoComplete="new-email"
-      onChange={handleEmailChange}
-     />
-
-
-     <div className={styles.passwordBox}>
-
-      <input
-       type={show ? "text":"password"}
-       placeholder="Password"
-       value={password}
-       required
-       autoComplete="new-password"
-       onChange={handlePasswordChange}
-      />
-
-      <span
-       className={styles.eye}
-       onClick={()=>setShow(!show)}
-      >
-       {show ? <FaEyeSlash/> : <FaEye/>}
-      </span>
-
+    <div className={styles.cardHeader}>
+     <div className={styles.roleIcon}>
+      <FaUserShield className={styles.roleIconInner} />
      </div>
+     <h2 className={styles.title}>Welcome Back</h2>
+     <p className={styles.subtitle}>Sign in to <span>Admin Portal</span></p>
+    </div>
 
-
-     {message && (
-      <div className={`${styles.statusBox} ${type==="success" ? styles.success : styles.error}`}>
-       {message}
+     <form className={styles.form} onSubmit={handleSubmit} autoComplete="off">
+      <div className={styles.inputGroup}>
+       <label className={styles.inputLabel}>Email Address</label>
+       <input
+        type="email"
+        className={styles.input}
+        placeholder="admin@school.edu"
+        value={email}
+        required
+        autoComplete="new-email"
+        onChange={handleEmailChange}
+       />
       </div>
-     )}
 
+      <div className={styles.inputGroup}>
+       <label className={styles.inputLabel}>Password</label>
+       <div className={styles.passwordBox}>
+        <input
+         type={show ? "text":"password"}
+         className={styles.input}
+         placeholder="Enter your password"
+         value={password}
+         required
+         autoComplete="new-password"
+         onChange={handlePasswordChange}
+        />
+        <span className={styles.eye} onClick={()=>setShow(!show)}>
+         {show ? <FaEyeSlash/> : <FaEye/>}
+        </span>
+       </div>
+      </div>
 
-     <button type="submit">Login</button>
+      {message && (
+       <div className={`${styles.statusBox} ${type==="success" ? styles.success : styles.error}`}>
+        {message}
+       </div>
+      )}
 
+      <button type="submit" className={styles.submitBtn} disabled={loading}>
+       {loading ? "Signing In..." : "Sign In"}
+      </button>
 
-     {/* GOOGLE LOGIN */}
+      <div className={styles.links}>
+       <a href="/login/forgot-password">Forgot Password?</a>
+      </div>
+     </form>
 
-
-
-     <div className={styles.links}>
-      <a href="/login/forgot-password">Forgot Password?</a>
-     </div>
-
-    </form>
-
+    <div className={styles.backLink}>
+     <a href="/login">
+      <span className={styles.backIcon}>&larr;</span>
+      Back to Portal Selection
+     </a>
+    </div>
    </div>
-
   </div>
-
  )
 }

@@ -4,11 +4,12 @@ import Teacher from "@/app/models/Teacher";
 
 export async function GET(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectDB();
-    const teacher = await Teacher.findById(params.id);
+    const { id } = await params;
+    const teacher = await Teacher.findById(id);
     
     if (!teacher) {
       return NextResponse.json(
@@ -28,14 +29,15 @@ export async function GET(
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectDB();
+    const { id } = await params;
     const body = await req.json();
     
     const teacher = await Teacher.findByIdAndUpdate(
-      params.id,
+      id,
       body,
       { new: true }
     );
@@ -58,12 +60,13 @@ export async function PATCH(
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectDB();
+    const { id } = await params;
     
-    const teacher = await Teacher.findByIdAndDelete(params.id);
+    const teacher = await Teacher.findByIdAndDelete(id);
     
     if (!teacher) {
       return NextResponse.json(

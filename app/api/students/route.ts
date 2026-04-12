@@ -3,10 +3,18 @@ import connectDB from "@/app/lib/mongodb";
 import Student from "@/app/models/Student";
 import { generateStudentId } from "@/app/lib/generateStudentId";
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
     await connectDB();
-    const students = await Student.find().sort({ createdAt: -1 });
+    const { searchParams } = new URL(request.url);
+    const classFilter = searchParams.get("class");
+    
+    let query = {};
+    if (classFilter) {
+      query = { classApplying: classFilter };
+    }
+    
+    const students = await Student.find(query).sort({ createdAt: -1 });
     return NextResponse.json(students);
   } catch (error) {
     console.error("STUDENTS API ERROR:", error);

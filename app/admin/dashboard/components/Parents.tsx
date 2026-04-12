@@ -85,11 +85,16 @@ export default function Parents() {
 
   const handleSaveEdit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!editParent || !editParent._id) return;
+    if (!editParent || !editParent._id) {
+      showMessage("Invalid parent data", "error");
+      return;
+    }
+    
+    const parentId = String(editParent._id);
     
     setSaving(true);
     try {
-      const res = await fetch(`/api/parents/${editParent._id}`, {
+      const res = await fetch(`/api/parents/${parentId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form)
@@ -98,7 +103,7 @@ export default function Parents() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Failed to update parent");
       
-      setParents(prev => prev.map(p => p._id === editParent._id ? data : p));
+      setParents(prev => prev.map(p => String(p._id) === parentId ? data : p));
       setEditParent(null);
       showMessage(`Parent "${data.name}" updated successfully`, "success");
     } catch (error: any) {
@@ -109,13 +114,16 @@ export default function Parents() {
 
   const handleDelete = async () => {
     if (!deleteParent || !deleteParent._id) return;
+    
+    const parentId = String(deleteParent._id);
+    
     setDeleting(true);
     try {
-      const res = await fetch(`/api/parents/${deleteParent._id}`, { method: "DELETE" });
+      const res = await fetch(`/api/parents/${parentId}`, { method: "DELETE" });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Failed to delete parent");
       
-      setParents(prev => prev.filter(p => p._id !== deleteParent._id));
+      setParents(prev => prev.filter(p => String(p._id) !== parentId));
       setDeleteParent(null);
       showMessage(`Parent "${deleteParent.name}" deleted successfully`, "success");
     } catch (error: any) {

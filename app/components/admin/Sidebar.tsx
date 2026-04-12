@@ -11,7 +11,11 @@ import {
   FaSignOutAlt,
   FaChevronLeft,
   FaChevronRight,
-  FaSchool
+  FaSchool,
+  FaClock,
+  FaCalendarCheck,
+  FaCalendarAlt,
+  FaBook
 } from "react-icons/fa";
 
 type SidebarProps = {
@@ -21,7 +25,9 @@ type SidebarProps = {
 const navItems = [
   { href: "/admin/dashboard", label: "Dashboard", icon: FaThLarge },
   { href: "/admin/admissions", label: "Admissions", icon: FaClipboardList },
-  { href: "/admin/principal", label: "Principal", icon: FaUserTie },
+  { href: "/admin/attendance", label: "Attendance", icon: FaCalendarCheck },
+  { href: "/admin/marks", label: "Marks", icon: FaBook },
+  { href: "/admin/timetable", label: "Timetable", icon: FaClock },
 ]
 
 export default function Sidebar({ collapsed }: SidebarProps) {

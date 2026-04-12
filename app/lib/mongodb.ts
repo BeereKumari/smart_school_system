@@ -1,23 +1,42 @@
 import mongoose from "mongoose"
 
-const MONGODB_URI = "mongodb://127.0.0.1:27017/school"
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/school"
+
+let connectionPromise: Promise<mongoose.Connection> | null = null
 
 export const connectDB = async () => {
+  if (mongoose.connection.readyState >= 1) {
+    return mongoose.connection
+  }
 
-if (mongoose.connection.readyState >= 1) return
+  if (connectionPromise) {
+    return connectionPromise
+  }
 
-try{
+  connectionPromise = (async () => {
+    try {
+      await mongoose.connect(MONGODB_URI)
+      console.log("MongoDB Connected")
 
-await mongoose.connect(MONGODB_URI)
+      mongoose.connection.on("error", (err) => {
+        console.error("MongoDB connection error:", err)
+        connectionPromise = null
+      })
 
-console.log("MongoDB Connected")
+      mongoose.connection.on("disconnected", () => {
+        console.log("MongoDB disconnected")
+        connectionPromise = null
+      })
 
+      return mongoose.connection
+    } catch (error) {
+      console.error("MongoDB Error:", error)
+      connectionPromise = null
+      throw error
+    }
+  })()
+
+  return connectionPromise
 }
-catch(error){
 
-console.log("MongoDB Error",error)
-
-}
-
-}
-export default connectDB;
+export default connectDB

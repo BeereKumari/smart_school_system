@@ -10,12 +10,15 @@ import Overview from "./components/Overview";
 import Students from "./components/Students";
 import Teachers from "./components/Teachers";
 import Parents from "./components/Parents";
-import { FaHome, FaSignOutAlt, FaCalendarAlt, FaClock } from "react-icons/fa";
+import Attendance from "./components/Attendance";
+import Announcements from "@/app/components/admin/Announcements";
+import { FaHome, FaSignOutAlt, FaCalendarAlt, FaClock, FaBook } from "react-icons/fa";
+import Link from "next/link";
 
 export default function AdminDashboard() {
   const { logout, loading } = useLogout();
-  type TabType = "Overview" | "Teachers" | "Students" | "Parents";
-  const tabs: TabType[] = ["Overview", "Teachers", "Students", "Parents"];
+  type TabType = "Overview" | "Teachers" | "Students" | "Attendance" | "Marks" | "Parents" | "Announcements";
+  const tabs: TabType[] = ["Overview", "Teachers", "Students", "Attendance", "Marks", "Parents", "Announcements"];
   const [activeTab, setActiveTab] = useState<TabType>("Overview");
   const [currentTime, setCurrentTime] = useState<Date | null>(null);
   const [mounted, setMounted] = useState(false);
@@ -33,7 +36,7 @@ export default function AdminDashboard() {
     month: "long",
     day: "numeric",
   }) : "";
-
+//  comment
   const formattedTime = currentTime ? currentTime.toLocaleTimeString("en-US", {
     hour: "2-digit",
     minute: "2-digit",
@@ -112,6 +115,39 @@ export default function AdminDashboard() {
           </div>
         )}
 
+        {activeTab === "Attendance" && (
+          <div className={styles.sectionFade}>
+            <Attendance />
+          </div>
+        )}
+
+        {activeTab === "Marks" && (
+          <div className={styles.sectionFade}>
+            <div style={{ padding: '20px', textAlign: 'center' }}>
+              <FaBook style={{ fontSize: '48px', color: '#f59e0b', marginBottom: '16px' }} />
+              <h2 style={{ margin: '0 0 12px 0', color: '#1e3a5f' }}>Marks Management</h2>
+              <p style={{ color: '#64748b', marginBottom: '20px' }}>View and manage student examination marks</p>
+              <Link 
+                href="/admin/marks" 
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  padding: '12px 24px',
+                  background: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)',
+                  color: 'white',
+                  borderRadius: '10px',
+                  textDecoration: 'none',
+                  fontWeight: '600',
+                  transition: 'all 0.3s ease'
+                }}
+              >
+                <FaBook /> Open Marks Management
+              </Link>
+            </div>
+          </div>
+        )}
+
         {activeTab === "Teachers" && (
           <div className={styles.sectionFade}>
             <Teachers />
@@ -121,6 +157,12 @@ export default function AdminDashboard() {
         {activeTab === "Parents" && (
           <div className={styles.sectionFade}>
             <Parents />
+          </div>
+        )}
+
+        {activeTab === "Announcements" && (
+          <div className={styles.sectionFade}>
+            <Announcements />
           </div>
         )}
       </div>

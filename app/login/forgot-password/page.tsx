@@ -4,6 +4,7 @@ import { useState,useEffect } from "react"
 import OTPInput from "@/app/components/otp/OTPInput"
 import styles from "@/app/styles/ForgotPassword.module.css"
 import { useRouter } from "next/navigation"
+import { FaLock, FaKey, FaCheckCircle, FaArrowLeft } from "react-icons/fa"
 
 export default function ForgotPassword(){
 
@@ -173,9 +174,16 @@ return(
 
 <div className={styles.container}>
 
+<div className={styles.bgOverlay}></div>
+<div className={styles.bgPattern}></div>
+
+<div className={`${styles.floatingOrb} ${styles.orb1}`}></div>
+<div className={`${styles.floatingOrb} ${styles.orb2}`}></div>
+
 <div className={styles.card}>
 
-<h2>Forgot Password</h2>
+<h2 className={styles.title}>Forgot Password</h2>
+<p className={styles.subtitle}>Enter your email to receive a verification code</p>
 
 
 {/* PROGRESS BAR */}
@@ -191,10 +199,25 @@ style={{ width: `${(step-1)*50}%` }}
 
 <div className={styles.steps}>
 
-<span className={step>=1?styles.active:""}>Email</span>
-<span className={step>=2?styles.active:""}>OTP</span>
-<span className={step>=3?styles.active:""}>Reset</span>
-<span className={step>=4?styles.active:""}>Success</span>
+<div className={`${styles.step} ${step>=1 ? styles.active : ''} ${step>1 ? styles.completed : ''}`}>
+ <div className={styles.stepNumber}>{step>1 ? <FaCheckCircle /> : '1'}</div>
+ <span className={styles.stepLabel}>Email</span>
+</div>
+
+<div className={`${styles.step} ${step>=2 ? styles.active : ''} ${step>2 ? styles.completed : ''}`}>
+ <div className={styles.stepNumber}>{step>2 ? <FaCheckCircle /> : '2'}</div>
+ <span className={styles.stepLabel}>Verify</span>
+</div>
+
+<div className={`${styles.step} ${step>=3 ? styles.active : ''} ${step>3 ? styles.completed : ''}`}>
+ <div className={styles.stepNumber}>{step>3 ? <FaCheckCircle /> : '3'}</div>
+ <span className={styles.stepLabel}>Reset</span>
+</div>
+
+<div className={`${styles.step} ${step>=4 ? styles.active : ''}`}>
+ <div className={styles.stepNumber}>4</div>
+ <span className={styles.stepLabel}>Done</span>
+</div>
 
 </div>
 
@@ -206,20 +229,29 @@ style={{ width: `${(step-1)*50}%` }}
 
 {step===1 &&(
 
-<div className={styles.field}>
+<div className={styles.form}>
+
+<div className={styles.inputGroup}>
+
+<label className={styles.inputLabel}>Email Address</label>
 
 <input
-required
-onChange={(e)=>setEmail(e.target.value)}
+ type="email"
+ className={styles.input}
+ placeholder="Enter your registered email"
+ required
+ value={email}
+ onChange={(e)=>setEmail(e.target.value)}
 />
 
-<label>Email</label>
+</div>
 
 <button
 className={styles.button}
 onClick={sendOTP}
 >
-Send OTP
+ <FaKey style={{marginRight: '8px'}} />
+ Send OTP
 </button>
 
 </div>
@@ -232,22 +264,23 @@ Send OTP
 
 {step===2 &&(
 
-<>
+<div className={styles.form}>
 
 <OTPInput value={otp} setValue={setOtp}/>
 
 <p className={styles.timer}>
-Resend OTP in {timer}s
+ Resend OTP in {timer}s
 </p>
 
 <button
 className={styles.button}
 onClick={verifyOTP}
 >
-Verify OTP
+ <FaCheckCircle style={{marginRight: '8px'}} />
+ Verify OTP
 </button>
 
-</>
+</div>
 
 )}
 
@@ -257,33 +290,39 @@ Verify OTP
 
 {step===3 &&(
 
-<div className={styles.field}>
+<div className={styles.form}>
+
+<div className={styles.inputGroup}>
+
+<label className={styles.inputLabel}>New Password</label>
 
 <div className={styles.passwordBox}>
 
 <input
-type={showPassword ? "text" : "password"}
-value={password}
-onChange={(e)=>setPassword(e.target.value)}
-placeholder="New Password"
+ type={showPassword ? "text" : "password"}
+ className={styles.input}
+ value={password}
+ onChange={(e)=>setPassword(e.target.value)}
+ placeholder="Enter new password"
 />
 
 <span
 className={styles.eye}
 onClick={()=>setShowPassword(!showPassword)}
 >
-{showPassword ? " " : "👁"}
+ {showPassword ? "👁" : "🔒"}
 </span>
 
 </div>
 
-<label>New Password</label>
+</div>
 
 <button
 className={styles.button}
 onClick={resetPassword}
 >
-Reset Password
+ <FaLock style={{marginRight: '8px'}} />
+ Reset Password
 </button>
 
 </div>
@@ -303,7 +342,7 @@ Reset Password
 <h3>Password Reset Successfully</h3>
 
 <p className={styles.redirectText}>
-Redirecting to login in {countdown} seconds...
+ Redirecting to login in {countdown} seconds...
 </p>
 
 </div>
@@ -315,10 +354,16 @@ Redirecting to login in {countdown} seconds...
 <p className={styles.message}>{message}</p>
 
 
+<div className={styles.backLink}>
+ <a href="/login">
+  <span className={styles.backIcon}><FaArrowLeft /></span>
+  Back to Login
+ </a>
+</div>
+
 </div>
 
 </div>
 
 )
-
 }

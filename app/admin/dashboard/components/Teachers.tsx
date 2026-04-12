@@ -2,7 +2,12 @@
 
 import { useState, useEffect } from "react";
 import styles from "@/app/styles/DashboardTab.module.css";
-import { FaChalkboardTeacher, FaUserEdit, FaTrash, FaEye, FaTimes, FaSave, FaCheck, FaExclamationTriangle, FaSearch, FaBook } from "react-icons/fa";
+import { FaChalkboardTeacher, FaUserEdit, FaTrash, FaEye, FaTimes, FaSave, FaCheck, FaExclamationTriangle, FaSearch, FaBook, FaPlus, FaMinus } from "react-icons/fa";
+
+interface ClassAssignment {
+  className: string;
+  subject: string;
+}
 
 export default function Teachers() {
   const [teachers, setTeachers] = useState<any[]>([]);
@@ -19,7 +24,7 @@ export default function Teachers() {
     name: "",
     email: "",
     phone: "",
-    subject: ""
+    assignedClasses: [] as ClassAssignment[]
   });
 
   useEffect(() => {
@@ -44,11 +49,36 @@ export default function Teachers() {
     }
   }
 
-  const filtered = teachers.filter((t: any) =>
-    (t.name || "").toLowerCase().includes(search.toLowerCase()) ||
-    (t.email || "").toLowerCase().includes(search.toLowerCase()) ||
-    (t.subject || "").toLowerCase().includes(search.toLowerCase())
-  );
+  const filtered = teachers.filter((t: any) => {
+    const searchLower = search.toLowerCase();
+    const nameMatch = (t.name || "").toLowerCase().includes(searchLower);
+    const emailMatch = (t.email || "").toLowerCase().includes(searchLower);
+    const classMatch = t.assignedClasses?.some((a: ClassAssignment) => 
+      a.className.toLowerCase().includes(searchLower) || 
+      a.subject.toLowerCase().includes(searchLower)
+    );
+    return nameMatch || emailMatch || classMatch;
+  });
+
+  function updateClassAssignment(index: number, field: 'className' | 'subject', value: string) {
+    const updated = [...form.assignedClasses];
+    updated[index][field] = value;
+    setForm({ ...form, assignedClasses: updated });
+  }
+
+  function addClassAssignment() {
+    setForm({
+      ...form,
+      assignedClasses: [...form.assignedClasses, { className: "", subject: "" }]
+    });
+  }
+
+  function removeClassAssignment(index: number) {
+    setForm({
+      ...form,
+      assignedClasses: form.assignedClasses.filter((_, i) => i !== index)
+    });
+  }
 
   const handleEdit = (teacher: any) => {
     setEditTeacher(teacher);
@@ -56,26 +86,34 @@ export default function Teachers() {
       name: teacher.name || "",
       email: teacher.email || "",
       phone: teacher.phone || "",
-      subject: teacher.subject || ""
+      assignedClasses: teacher.assignedClasses || []
     });
   };
 
   const handleSaveEdit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!editTeacher || !editTeacher._id) return;
+    if (!editTeacher || !editTeacher._id) {
+      showMessage("Invalid teacher data", "error");
+      return;
+    }
+    
+    const teacherId = String(editTeacher._id);
     
     setSaving(true);
     try {
-      const res = await fetch(`/api/teachers/${editTeacher._id}`, {
+      const updateData = { ...form };
+      updateData.assignedClasses = form.assignedClasses.filter((a: ClassAssignment) => a.className && a.subject);
+      
+      const res = await fetch(`/api/teachers/${teacherId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form)
+        body: JSON.stringify(updateData)
       });
       
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Failed to update teacher");
       
-      setTeachers(prev => prev.map(t => t._id === editTeacher._id ? data : t));
+      setTeachers(prev => prev.map(t => String(t._id) === teacherId ? data : t));
       setEditTeacher(null);
       showMessage(`Teacher "${data.name}" updated successfully`, "success");
     } catch (error: any) {
@@ -86,13 +124,16 @@ export default function Teachers() {
 
   const handleDelete = async () => {
     if (!deleteTeacher || !deleteTeacher._id) return;
+    
+    const teacherId = String(deleteTeacher._id);
+    
     setDeleting(true);
     try {
-      const res = await fetch(`/api/teachers/${deleteTeacher._id}`, { method: "DELETE" });
+      const res = await fetch(`/api/teachers/${teacherId}`, { method: "DELETE" });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Failed to delete teacher");
       
-      setTeachers(prev => prev.filter(t => t._id !== deleteTeacher._id));
+      setTeachers(prev => prev.filter(t => String(t._id) !== teacherId));
       setDeleteTeacher(null);
       showMessage(`Teacher "${deleteTeacher.name}" deleted successfully`, "success");
     } catch (error: any) {
@@ -104,6 +145,23 @@ export default function Teachers() {
   const getInitials = (name: string) => {
     if (!name) return "?";
     return name.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2);
+  };
+
+  const handleToggleStatus = async (teacher: any) => {
+    try {
+      const res = await fetch(`/api/teachers/${teacher._id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ isActive: !teacher.isActive })
+      });
+      
+      if (res.ok) {
+        setTeachers(prev => prev.map(t => String(t._id) === String(teacher._id) ? { ...t, isActive: !t.isActive } : t));
+        showMessage(`Teacher ${teacher.isActive ? "deactivated" : "activated"} successfully`, "success");
+      }
+    } catch (error) {
+      showMessage("Failed to update status", "error");
+    }
   };
 
   return (
@@ -168,7 +226,7 @@ export default function Teachers() {
                 <th>Teacher ID</th>
                 <th>Email</th>
                 <th>Phone</th>
-                <th>Subject</th>
+                <th>Class & Subject</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -186,7 +244,23 @@ export default function Teachers() {
                   <td><span className={styles.studentId}>{t.teacherId || "N/A"}</span></td>
                   <td>{t.email || "N/A"}</td>
                   <td>{t.phone || "N/A"}</td>
-                  <td><span className={styles.classBadge}><FaBook /> {t.subject || "N/A"}</span></td>
+                  <td>
+                    <div className={styles.assignmentsCell}>
+                      {t.assignedClasses && t.assignedClasses.length > 0 ? (
+                        t.assignedClasses.slice(0, 2).map((a: ClassAssignment, i: number) => (
+                          <div key={i} className={styles.assignmentMini}>
+                            <span className={styles.classBadge}>{a.className}</span>
+                            <span className={styles.subjectSmall}>{a.subject}</span>
+                          </div>
+                        ))
+                      ) : (
+                        <span className={styles.classBadge}>Not Assigned</span>
+                      )}
+                      {t.assignedClasses && t.assignedClasses.length > 2 && (
+                        <span className={styles.moreCount}>+{t.assignedClasses.length - 2} more</span>
+                      )}
+                    </div>
+                  </td>
                   <td>
                     <div className={styles.actions}>
                       <button className={`${styles.actionBtn} ${styles.viewBtn}`} title="View" onClick={() => setSelectedTeacher(t)}><FaEye /></button>
@@ -226,8 +300,22 @@ export default function Teachers() {
             </div>
             <div className={styles.modalInfoSection}>
               <h4 className={styles.modalInfoTitle}>Professional Information</h4>
-              <div className={styles.modalInfoGrid}>
-                <div className={styles.modalInfoItem}><span>Subject</span><p>{selectedTeacher.subject || "N/A"}</p></div>
+              <div className={styles.modalInfoGrid} style={{ gridTemplateColumns: '1fr' }}>
+                <div className={styles.modalInfoItem}>
+                  <span>Class & Subject Assignments</span>
+                  {selectedTeacher.assignedClasses && selectedTeacher.assignedClasses.length > 0 ? (
+                    <div className={styles.teacherAssignments}>
+                      {selectedTeacher.assignedClasses.map((a: ClassAssignment, i: number) => (
+                        <div key={i} className={styles.assignmentDisplay}>
+                          <span className={styles.classBadge}>{a.className}</span>
+                          <span className={styles.subjectText}>{a.subject}</span>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p>Not Assigned</p>
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -256,8 +344,46 @@ export default function Teachers() {
                   <input type="tel" className={styles.formInput} value={form.phone} onChange={(e) => setForm({...form, phone: e.target.value})} placeholder="Enter phone number" />
                 </div>
                 <div className={styles.formGroup} style={{ gridColumn: 'span 2' }}>
-                  <label className={styles.formLabel}>Subject *</label>
-                  <input type="text" className={styles.formInput} value={form.subject} onChange={(e) => setForm({...form, subject: e.target.value})} required placeholder="Enter subject specialization" />
+                  <label className={styles.formLabel}>Class & Subject Assignments</label>
+                  <div className={styles.editAssignments}>
+                    {form.assignedClasses.map((assignment, index) => (
+                      <div key={index} className={styles.assignmentRow}>
+                        <select 
+                          value={assignment.className}
+                          onChange={(e) => updateClassAssignment(index, 'className', e.target.value)}
+                          className={styles.classSelect}
+                        >
+                          <option value="">Select Class</option>
+                          <option value="Nursery">Nursery</option>
+                          <option value="LKG">LKG</option>
+                          <option value="UKG">UKG</option>
+                          <option value="Class 1">Class 1</option>
+                          <option value="Class 2">Class 2</option>
+                          <option value="Class 3">Class 3</option>
+                          <option value="Class 4">Class 4</option>
+                          <option value="Class 5">Class 5</option>
+                          <option value="Class 6">Class 6</option>
+                          <option value="Class 7">Class 7</option>
+                          <option value="Class 8">Class 8</option>
+                          <option value="Class 9">Class 9</option>
+                          <option value="Class 10">Class 10</option>
+                        </select>
+                        <input 
+                          type="text"
+                          placeholder="Subject"
+                          value={assignment.subject}
+                          onChange={(e) => updateClassAssignment(index, 'subject', e.target.value)}
+                          className={styles.subjectInput}
+                        />
+                        <button type="button" className={styles.removeAssignmentBtn} onClick={() => removeClassAssignment(index)}>
+                          <FaMinus />
+                        </button>
+                      </div>
+                    ))}
+                    <button type="button" className={styles.addAssignmentBtn} onClick={addClassAssignment}>
+                      <FaPlus /> Add Assignment
+                    </button>
+                  </div>
                 </div>
               </div>
               <div className={styles.modalActions}>
@@ -282,7 +408,7 @@ export default function Teachers() {
               <p className={styles.deleteText}>You are about to delete <strong>"{deleteTeacher.name}"</strong> from the database. This action cannot be undone.</p>
               <div className={styles.deleteInfo}>
                 <p><strong>Teacher ID:</strong> {deleteTeacher.teacherId}</p>
-                <p><strong>Subject:</strong> {deleteTeacher.subject}</p>
+                <p><strong>Assignments:</strong> {deleteTeacher.assignedClasses && deleteTeacher.assignedClasses.length > 0 ? deleteTeacher.assignedClasses.length : "None"}</p>
               </div>
             </div>
             <div className={styles.deleteActions}>

@@ -1,5 +1,5 @@
-import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, setPersistence, browserLocalPersistence} from "firebase/auth";
+import { initializeApp, getApps } from "firebase/app";
+import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAmLqt6Q6IB5NUFbTkySCxX8CScYj_SwL0",
@@ -10,13 +10,9 @@ const firebaseConfig = {
   appId: "1:297736027542:web:9732d28ddf65bc05dfb1b7"
 };
 
-const app = initializeApp(firebaseConfig);
+const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
 
 export const auth = getAuth(app);
-
-setPersistence(auth, browserLocalPersistence)
-
-export const googleProvider = new GoogleAuthProvider();
 
 
 

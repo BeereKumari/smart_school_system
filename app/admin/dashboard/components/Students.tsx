@@ -178,9 +178,12 @@ export default function Students() {
       showMessage("Invalid student data", "error");
       return;
     }
+    
+    const studentId = String(deleteStudent._id);
+    
     setDeleting(true);
     try {
-      const res = await fetch(`/api/students/${deleteStudent._id}`, {
+      const res = await fetch(`/api/students/${studentId}`, {
         method: "DELETE"
       });
       
@@ -190,7 +193,7 @@ export default function Students() {
         throw new Error(data.message || "Failed to delete student");
       }
       
-      setStudents(prev => prev.filter(s => s._id !== deleteStudent._id));
+      setStudents(prev => prev.filter(s => String(s._id) !== studentId));
       setDeleteStudent(null);
       showMessage(`Student "${deleteStudent.studentName}" deleted successfully`, "success");
     } catch (error: any) {
@@ -215,7 +218,7 @@ export default function Students() {
       }
       
       setStudents(prev => prev.map(s => 
-        s._id === studentId ? data : s
+        String(s._id) === studentId ? data : s
       ));
       if (selectedStudent?._id === studentId) {
         setSelectedStudent(data);
@@ -266,7 +269,7 @@ export default function Students() {
       }
       
       setStudents(prev => prev.map(s => 
-        s._id === editStudent._id ? data : s
+        String(s._id) === studentId ? data : s
       ));
       setEditStudent(null);
       showMessage(`Student "${data.studentName}" updated successfully`, "success");

@@ -285,6 +285,126 @@
   color: #8b5cf6;
 }
 
+.card:nth-child(5) .cardIcon {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(220, 38, 38, 0.1) 100%);
+  color: #ef4444;
+}
+
+.cardLink {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.cardLink h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 8px;
+}
+
+.cardLink p {
+  font-size: 14px;
+  color: #64748b;
+  margin: 0;
+}
+
+.marksSection {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 24px;
+  border: 1px solid #e2e8f0;
+  margin-top: 24px;
+}
+
+.marksSectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.marksSectionHeader h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.viewAllLink {
+  font-size: 14px;
+  color: #f59e0b;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.viewAllLink:hover {
+  color: #d97706;
+}
+
+.marksTable {
+  overflow-x: auto;
+}
+
+.marksTable table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.marksTable th {
+  text-align: left;
+  padding: 14px 16px;
+  background: #f8fafc;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.marksTable td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #f1f5f9;
+  color: #334155;
+  font-size: 14px;
+}
+
+.marksTable tr:last-child td {
+  border-bottom: none;
+}
+
+.marksTable tr:hover {
+  background: #f8fafc;
+}
+
+.gradeBadge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  color: white;
+  text-transform: uppercase;
+}
+
+.loadingState {
+  padding: 40px;
+  text-align: center;
+  color: #64748b;
+}
+
+.emptyState {
+  padding: 40px;
+  text-align: center;
+  color: #64748b;
+  background: #f8fafc;
+  border-radius: 12px;
+}
+
 .cardTitle {
   font-size: 14px;
   color: #64748b;

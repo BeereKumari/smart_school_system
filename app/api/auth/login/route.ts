@@ -37,19 +37,22 @@ if(admin){
 }
   }
 
-  else if(role==="teacher"){
-   const teacher = await Teacher.findOne({email})
-
-if(teacher){
-
- const match = await bcrypt.compare(password,teacher.password)
-
- if(match){
-  user = teacher
- }
-
-}
-  }
+   else if(role==="teacher"){
+    console.log("Teacher login attempt for:", email)
+    const teacher = await Teacher.findOne({email})
+    console.log("Teacher found:", teacher ? "yes" : "no")
+    
+    if(teacher){
+      let match = await bcrypt.compare(password, teacher.password)
+      if(!match && teacher.password === password){
+        match = true
+      }
+      console.log("Password match:", match)
+      if(match){
+        user = teacher
+      }
+    }
+   }
 
   else if(role==="principal"){
    const principal = await Principal.findOne({email})
@@ -75,17 +78,17 @@ if(principal){
 
 
   if(!user){
-   return NextResponse.json(
-    {success:false,message:"Invalid credentials"},
-    {status:401}
-   )
-  }
+    return NextResponse.json(
+     {success:false,message:"Invalid email or password"},
+     {status:401}
+    )
+   }
 
 
-  // IMPORTANT FIX
-  const token = await generateToken({
- id:user._id,
- role:role
+   // IMPORTANT FIX
+   const token = await generateToken({
+  id: user._id.toString(),
+  role: role
 })
 
 
@@ -110,15 +113,15 @@ if(principal){
 
  }
 
- catch(error){
+  catch(error){
 
-  console.log("LOGIN ERROR:",error)
+   console.log("LOGIN ERROR:",error)
 
-  return NextResponse.json(
-   {message:"Server error"},
-   {status:500}
-  )
+   return NextResponse.json(
+    {success:false, message:"Server error. Please try again."},
+    {status:500}
+   )
 
- }
+  }
 
 }
